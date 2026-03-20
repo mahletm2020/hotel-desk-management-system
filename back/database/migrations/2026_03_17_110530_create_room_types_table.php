@@ -17,11 +17,9 @@ return new class extends Migration
             $table->string('name');//single ,double ,suite ,family
             $table->string('description')->nullable();
 
-            $table->string('base_price',10,2);
+            $table->decimal('base_price',10,2);
 
-            $table->string('capacity');
-            $table->string('timestamp');
-            
+            $table->integer('capacity');
             $table->unique('name');
            
 

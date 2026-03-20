@@ -15,4 +15,15 @@ class Guest extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'phone',
+        'email',
+        'id_type',
+        'id_number',
+        'address',
+        'notes',
+    ];
 }

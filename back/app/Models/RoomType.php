@@ -11,5 +11,10 @@ class RoomType extends Model
         return $this->hasMany(Room::class);
     }
 
-   
+    protected $fillable = [
+        'name',
+        'description',
+        'base_price',
+        'capacity',
+    ];
 }

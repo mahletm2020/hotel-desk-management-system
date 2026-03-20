@@ -15,4 +15,14 @@ class ReservationRoom extends Model
     {
         return $this->belongsTo(RoomType::class);
     }
+    protected $fillable = [
+        'reservation_id',
+        'room_type_id',
+        'quantity',
+        'price',
+    ];  
+   public function room()
+{
+    return $this->belongsTo(Room::class);
+}
 }

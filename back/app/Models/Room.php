@@ -15,4 +15,11 @@ public function stayRooms()
 {
     return $this->hasMany(StayRoom::class);
 }
+   protected $fillable = [
+    'room_number',
+    'room_type_id',
+    'floor',
+    'status',
+    'notes',
+];
 }

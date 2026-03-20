@@ -15,4 +15,10 @@ public function room()
 {
     return $this->belongsTo(Room::class);
 }
+  
+public function reservation()
+{
+    return $this->belongsTo(\App\Models\Reservation::class);
+}
+
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('room_type_id')->constrained()->cascadeOnDelete();
 
 
-            $table->integer('quantity');
+            $table->integer('quantity')->nullable();
 
             $table->decimal('price', 10, 2);
 

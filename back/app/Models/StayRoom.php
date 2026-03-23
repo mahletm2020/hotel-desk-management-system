@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class StayRoom extends Model
 {
+    protected $fillable = [
+        'stay_id',
+        'room_id',
+        'price_per_night',
+        'check_in',
+        'check_out',
+    ];
+
     public function stay()
 {
     return $this->belongsTo(Stay::class);

@@ -12,6 +12,10 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
+use App\Models\Stay;
+use App\Models\StayRoom;
+use App\Models\Room;
 
 class ReservationResource extends Resource
 {
@@ -76,6 +80,40 @@ class ReservationResource extends Resource
                 ->dateTime(),
         ])
         ->actions([
+            Tables\Actions\Action::make('check_in')
+                ->label('Check In')
+                ->icon('heroicon-o-check-circle')
+                ->color('success')
+                ->visible(fn (Reservation $record) => $record->status === 'confirmed')
+                ->action(function (Reservation $record) {
+                    DB::transaction(function () use ($record) {
+                        // Create the stay
+                        $stay = Stay::create([
+                            'guest_id' => $record->guest_id,
+                            'reservation_id' => $record->id,
+                            'check_in_date' => now(),
+                            'check_out_date' => $record->check_out_date,
+                            'status' => 'active',
+                            'total_price' => $record->total_price ?? 0,
+                        ]);
+
+                        // Create the stay room
+                        StayRoom::create([
+                            'stay_id' => $stay->id,
+                            'room_id' => $record->room_id,
+                            'price_per_night' => $record->room->roomType->base_price ?? 0,
+                            'check_in' => now(),
+                        ]);
+
+                        // Update room status
+                        $record->room->update(['status' => 'occupied']);
+
+                        // Update reservation status
+                        $record->update(['status' => 'checked_in']);
+                    });
+                })
+                ->requiresConfirmation()
+                ->successNotificationTitle('Guest checked in successfully.'),
             Tables\Actions\EditAction::make(),
         ])
         ->bulkActions([
